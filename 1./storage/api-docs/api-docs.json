@@ -1,0 +1,301 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Task #1 Documentation",
+        "description": "Simple API",
+        "contact": {
+            "email": "t.warezak@gmail.com"
+        },
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://127.0.0.1:8060/api",
+            "description": "API Server"
+        }
+    ],
+    "paths": {
+        "/users": {
+            "get": {
+                "tags": [
+                    "Users"
+                ],
+                "description": "Users list",
+                "parameters": [
+                    {
+                        "name": "filter[country]",
+                        "in": "query",
+                        "description": "Filter results by country - e.g.: `?filter[country]=Austriar`",
+                        "required": false,
+                        "style": "form",
+                        "schema": {
+                            "type": "string",
+                            "example": "Austria"
+                        }
+                    },
+                    {
+                        "name": "filter[active]",
+                        "in": "query",
+                        "description": "Filter results by active - e.g.: `?filter[active]=true`",
+                        "required": false,
+                        "style": "form",
+                        "schema": {
+                            "type": "string",
+                            "example": "true"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/users_resource"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/users/{userId}/details": {
+            "put": {
+                "tags": [
+                    "Users"
+                ],
+                "description": "Update user details",
+                "operationId": "fd90cb5dce0127d4c488347278474dcf",
+                "parameters": [
+                    {
+                        "name": "userId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/uder_details_update_request"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/users_resource"
+                                }
+                            }
+                        }
+                    },
+                    "409": {
+                        "description": "User details not exist.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "description": "Error message",
+                                            "type": "string",
+                                            "example": "User details not exist."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "User not found"
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "description": "Error message",
+                                            "type": "string",
+                                            "example": "The given data was invalid."
+                                        },
+                                        "errors": {
+                                            "description": "Validation details",
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/users/{userId}": {
+            "delete": {
+                "tags": [
+                    "Users"
+                ],
+                "description": "Detlete user",
+                "operationId": "341625bac679588752894996746f795e",
+                "parameters": [
+                    {
+                        "name": "userId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "409": {
+                        "description": "User details not exist.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "description": "Error message",
+                                            "type": "string",
+                                            "example": "User details not exist."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "User not found"
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "uder_details_update_request": {
+                "title": "User details update request",
+                "properties": {
+                    "first_name": {
+                        "type": "string",
+                        "example": "Jan"
+                    },
+                    "last_name": {
+                        "type": "string",
+                        "example": "Kowalski"
+                    },
+                    "phone_number": {
+                        "type": "string",
+                        "example": "48123123123"
+                    },
+                    "country_id": {
+                        "type": "integer",
+                        "example": 1
+                    }
+                },
+                "type": "object"
+            },
+            "country_resource": {
+                "title": "Country resource",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int"
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "Austria"
+                    },
+                    "iso2": {
+                        "type": "string",
+                        "example": "AT"
+                    },
+                    "iso3": {
+                        "type": "string",
+                        "example": "AUT"
+                    }
+                },
+                "type": "object"
+            },
+            "details_resource": {
+                "title": "Details resource",
+                "properties": {
+                    "first_name": {
+                        "type": "string",
+                        "example": "Jan"
+                    },
+                    "last_name": {
+                        "type": "string",
+                        "example": "Kowaslki"
+                    },
+                    "phone_number": {
+                        "type": "string",
+                        "example": "0043664777777"
+                    },
+                    "country": {
+                        "$ref": "#/components/schemas/country_resource"
+                    }
+                },
+                "type": "object"
+            },
+            "users_resource": {
+                "title": "Users resource",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": "1"
+                    },
+                    "email": {
+                        "type": "string",
+                        "example": "name@examle.com"
+                    },
+                    "active": {
+                        "type": "bool",
+                        "example": "true"
+                    },
+                    "details": {
+                        "$ref": "#/components/schemas/details_resource"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "datetime",
+                        "example": "2020-01-01 12:01:01"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "datetime",
+                        "example": "2020-01-01 12:01:01"
+                    }
+                },
+                "type": "object"
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Task #1 - users",
+            "description": "API Endpoints of Projects"
+        }
+    ],
+    "security": [
+        []
+    ]
+}
