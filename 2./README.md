@@ -29,12 +29,3 @@ Some ideas:
 - you can create a factory to determine the class handler
 - you can also validate the source value and if the value is unknown throw an exception (eg: /transactions?source=html)
 
-
-## Instructions
-
-### Init project
-
-- run docker: `docker-compose up -d`
-- log to docker: `docker exec -it 2_php_1 bash`
-- run composer in docker: `composer install`
-- run migration (will seed the DB): `php artisane migrate`
